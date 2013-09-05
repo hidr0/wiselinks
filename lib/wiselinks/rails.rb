@@ -13,8 +13,8 @@ module Wiselinks
       end
 
       initializer "wiselinks.register_assets_digest"  do
-        if ::Rails.application.config.assets.digest && ::Rails.application.config.assets.digests.present?
-          Wiselinks.options[:assets_digest] ||= Digest::MD5.hexdigest(::Rails.application.config.assets.digests.values.join)
+        if ::Rails.application.config.assets.digest && Dir.glob('public/assets/manifest-*.json').any?
+          Wiselinks.options[:assets_digest] ||= Digest::MD5.hexdigest(Sprockets::Manifest.new(::Rails.env, Dir.glob('public/assets/manifest-*.json').first).assets.values.join)
         end
       end
     end
